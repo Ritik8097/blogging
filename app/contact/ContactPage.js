@@ -2,6 +2,7 @@
 "use client";
 
 import { useState } from "react";
+import Script from 'next/script'
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -92,7 +93,38 @@ export default function ContactPage() {
         </div>
       </form>
      
-   
+    <Script id="schema-org" type="application/ld+json">
+  {`
+    {
+      "@context": "https://schema.org",
+      "@type": "ContactPage",
+      "name": "Contact Gadget Insider",
+      "url": "https://gadgetinsider.in/contact",
+      "description": "Get in touch with the Gadget Insider team. We'd love to hear from you!",
+      "mainEntity": {
+        "@type": "Organization",
+        "name": "Gadget Insider",
+        "url": "https://gadgetinsider.in",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+91-123-456-7890",
+          "contactType": "customer service",
+          "email": "contact@gadgetinsider.in",
+          "areaServed": "IN",
+          "availableLanguage": ["English", "Hindi"]
+        },
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "123 Tech Street",
+          "addressLocality": "Bangalore",
+          "addressRegion": "Karnataka",
+          "postalCode": "560001",
+          "addressCountry": "IN"
+        }
+      }
+    }
+  `}
+</Script>
     </div>
   );
 }
