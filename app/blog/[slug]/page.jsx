@@ -14,7 +14,7 @@ export async function generateMetadata({ params }) {
   }
 
   return {
-    title: `${post.title} - Gadget Insider`,
+    title: `${post.title} `,
     description: post.excerpt,
     alternates: {
       canonical: `https://gadgetinsider.in/blog/${post.slug}`,
