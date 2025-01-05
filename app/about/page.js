@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import Script from 'next/script'
 
 export const metadata = {
   title: 'About Us - Gadget Insider',
@@ -69,6 +70,27 @@ export default function AboutPage() {
           Contact Us
         </Link>
       </section>
+                 <Script id="schema-org" type="application/ld+json">
+  {`
+    {
+      "@context": "https://schema.org",
+      "@type": "AboutPage",
+      "name": "About Gadget Insider",
+      "url": "https://gadgetinsider.in/about",
+      "description": "Learn about Gadget Insider, our mission, and our team of tech enthusiasts dedicated to bringing you the latest in technology news and reviews.",
+      "mainEntity": {
+        "@type": "Organization",
+        "name": "Gadget Insider",
+        "url": "https://gadgetinsider.in",
+        "logo": "https://gadgetinsider.in/logo.png",
+        "sameAs": [
+          "https://twitter.com/gadgetinsider",
+          "https://linkedin.com/company/gadgetinsider"
+        ]
+      }
+    }
+  `}
+</Script>
     </div>
   )
 }
