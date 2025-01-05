@@ -61,6 +61,7 @@ export default function RootLayout({ children }) {
     <html lang="en" className="light">
     <head>
         <meta name="google-site-verification" content="l0qvZtRQt9BgEasMkESdqw32hirSgGrqFaqlmkswYm4" />
+    <meta name="msvalidate.01" content="47B3B8A62C752CC2F6E5E8C3309EE787" />
       </head>
       <body className="bg-white text-gray-900 dark:bg-slate-900 dark:text-gray-100">
        
