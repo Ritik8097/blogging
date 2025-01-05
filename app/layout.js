@@ -1,3 +1,4 @@
+
 import './globals.css'
 import Link from 'next/link'
 import Script from 'next/script'
@@ -52,14 +53,12 @@ export const metadata = {
       'max-snippet': -1,
     },
   },
-  googleSiteVerification: 'l0qvZtRQt9BgEasMkESdqw32hirSgGrqFaqlmkswYm4',
 }
 
 export default function RootLayout({ children }) {
  
   return (
     <html lang="en" className="light">
-     
       <body className="bg-white text-gray-900 dark:bg-slate-900 dark:text-gray-100">
        
 
@@ -111,4 +110,5 @@ export default function RootLayout({ children }) {
       </body>
     </html>
   )
-} i have this layout structure but it failed owenership in google search console
+}
+
