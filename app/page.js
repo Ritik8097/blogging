@@ -5,7 +5,7 @@ import blogPosts from '../data/blog-posts.json'
 
 export const metadata = {
   title: 'Gadget Insider - Latest Tech News, Reviews & Insights',
-  description: 'Discover the latest technology news, in-depth gadget reviews, and expert tech insights. Stay informed with Gadget Insider, your trusted source for all things tech.',
+  description: 'Discover the latest gadget reviews, and expert tech insights. Stay informed with Gadget Insider, your trusted source for all things tech.',
 }
 
 export default function Home() {
@@ -69,6 +69,22 @@ export default function Home() {
           })}
         </section>
       </div>
+          <Script id="schema-org" type="application/ld+json">
+        {`
+          {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "Gadget Insider",
+            "url": "https://gadgetinsider.in",
+            "description": "Your trusted source for the latest tech news, in-depth reviews, and expert insights into the world of technology.",
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": "https://gadgetinsider.in/search?q={search_term_string}",
+              "query-input": "required name=search_term_string"
+            }
+          }
+        `}
+      </Script>
     </>
   )
 }
