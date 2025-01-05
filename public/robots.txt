@@ -1,0 +1,21 @@
+# www.robotstxt.org/
+
+# Allow crawling of all content
+User-agent: *
+Allow: /
+
+# Optimize crawling
+Crawl-delay: 10
+
+# Disallow crawling of certain pages
+Disallow: /admin/
+Disallow: /private/
+Disallow: /search
+
+# Sitemap location
+Sitemap: https://gadgetinsider.in/sitemap.xml
+
+# Block specific bots (example)
+User-agent: BadBot
+Disallow: /
+
