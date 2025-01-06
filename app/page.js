@@ -25,6 +25,7 @@ export default function Home() {
           {blogPosts.map(function(post) {
             return (
               <article key={post.id} className="bg-white rounded-xl shadow-lg overflow-hidden transition-transform hover:scale-105 border border-gray-200 dark:bg-slate-800 dark:border-slate-700">
+              <Link href={"/blog/" + post.slug}>
                 <Image 
                   src={post.imageUrl} 
                   alt={post.title} 
@@ -64,6 +65,7 @@ export default function Home() {
                     </Link>
                   </div>
                 </div>
+                        </Link>
               </article>
             );
           })}
