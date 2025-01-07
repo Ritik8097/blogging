@@ -60,7 +60,7 @@ export default function BlogPost({ params }) {
     <>
       <article className="max-w-3xl mx-auto">
         <div className="mb-8">
-          <div className="flex gap-2 mb-4">
+          <div className="flex gap-2 mb-4 whitespace-nowrap overflow-scroll">
             {post.categories.map(category => (
               <span 
                 key={category} 
