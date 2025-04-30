@@ -1,20 +1,35 @@
+// app/blog/[slug]/page.js
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Script from 'next/script'
-import blogPosts from '../../../data/blog-posts.json'
+import { marked } from 'marked';
 
+// ✅ SERVER fetch — single post by slug
+async function getBlogPost(slug) {
+  const res = await fetch(`https://ai-blogging-backend-production.up.railway.app/api/posts/${slug}`, { cache: 'no-store' });
+  if (!res.ok) {
+    return null;
+  }
+  return res.json();
+}
+
+function parseMarkdown(content) {
+  return marked(content);
+}
+
+// ✅ Dynamic Metadata (SEO + OpenGraph)
 export async function generateMetadata({ params }) {
-  const post = blogPosts.find(post => post.slug === params.slug);
+  const post = await getBlogPost(params.slug);
 
   if (!post) {
     return {
       title: 'Post Not Found - Gadget Insider',
-      description: 'The requested blog post could not be found.'
+      description: 'The requested blog post could not be found.',
     };
   }
 
   return {
-    title: `${post.title} `,
+    title: `${post.title}`,
     description: post.excerpt,
     alternates: {
       canonical: `https://gadgetinsider.in/blog/${post.slug}`,
@@ -25,7 +40,7 @@ export async function generateMetadata({ params }) {
       url: `https://gadgetinsider.in/blog/${post.slug}`,
       type: 'article',
       article: {
-        publishedTime: post.date,
+        publishedTime: post.createdAt,
         authors: [post.author],
         tags: post.categories,
       },
@@ -47,10 +62,8 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default function BlogPost({ params }) {
-  const post = blogPosts.find(function(post) {
-    return post.slug === params.slug;
-  });
+export default async function BlogPost({ params }) {
+  const post = await getBlogPost(params.slug);
 
   if (!post) {
     notFound();
@@ -61,36 +74,30 @@ export default function BlogPost({ params }) {
       <article className="max-w-3xl mx-auto">
         <div className="mb-8">
           <div className="flex gap-2 mb-4 whitespace-nowrap overflow-scroll">
-            {post.categories.map(category => (
-              <span 
-                key={category} 
-                className="px-3 py-1 text-sm rounded-full bg-blue-100 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400"
-              >
-                {category}
-              </span>
-            ))}
+          
           </div>
           <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-white">{post.title}</h1>
           <div className="flex items-center text-gray-600 dark:text-gray-400 mb-6">
             <span className="mr-4">{post.author}</span>
-            <time dateTime={post.date} className="mr-4">{post.date}</time>
+            <time dateTime={post.createdAt} className="mr-4">{new Date(post.createdAt).toLocaleDateString()}</time>
             <span>{post.readTime}</span>
           </div>
         </div>
         
-        <Image 
+        <img
           src={post.imageUrl} 
           alt={post.title} 
           width={800} 
           height={400} 
-          className="w-full h-64 object-cover rounded-xl shadow-lg mb-8" 
+          className="w-full h-96 object-cover rounded-xl shadow-lg mb-8" 
           priority
         />
         
-        <div className="prose max-w-none dark:prose-invert">
-        <div dangerouslySetInnerHTML={{ __html: post.content }} />
-        </div>
+        <div className="prose prose-lg max-w-none dark:prose-invert prose-headings:text-gray-900 dark:prose-headings:text-white prose-img:rounded-lg prose-img:shadow">
+  <div dangerouslySetInnerHTML={{ __html: parseMarkdown(post.content) }} />
+</div>
       </article>
+
       <Script id="blog-post-schema" type="application/ld+json">
         {`
           {
@@ -111,8 +118,8 @@ export default function BlogPost({ params }) {
                 "url": "https://gadgetinsider.in/logo.png"
               }
             },
-            "datePublished": "${post.date}",
-            "dateModified": "${post.date}",
+            "datePublished": "${post.createdAt}",
+            "dateModified": "${post.updatedAt || post.createdAt}",
             "mainEntityOfPage": {
               "@type": "WebPage",
               "@id": "https://gadgetinsider.in/blog/${post.slug}"
@@ -124,4 +131,3 @@ export default function BlogPost({ params }) {
     </>
   );
 }
-
