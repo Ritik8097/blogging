@@ -1,14 +1,26 @@
+// app/page.js
 import Link from 'next/link'
 import Image from 'next/image'
 import Script from 'next/script'
-import blogPosts from '../data/blog-posts.json'
 
+// Metadata (SEO)
 export const metadata = {
   title: 'Gadget Insider - Latest Tech News, Reviews & Insights',
   description: 'Discover the latest gadget reviews, and expert tech insights. Stay informed with Gadget Insider, your trusted source for all things tech.',
 }
 
-export default function Home() {
+// ✅ SERVER fetch — replaces static JSON!
+async function getBlogPosts() {
+  const res = await fetch(`https://ai-blogging-backend-production.up.railway.app/api/posts`, { cache: 'no-store' });
+  if (!res.ok) {
+    throw new Error('Failed to fetch blog posts');
+  }
+  return res.json();
+}
+
+export default async function Home() {
+  const blogPosts = await getBlogPosts();
+
   return (
     <>
       <div className="space-y-12">
@@ -22,48 +34,33 @@ export default function Home() {
         </section>
 
         <section className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {blogPosts.map(function(post) {
-            return (
-              <article key={post.id} className="bg-white rounded-xl shadow-lg overflow-hidden transition-transform hover:scale-105 border border-gray-200 dark:bg-slate-800 dark:border-slate-700">
-              <Link href={"/blog/" + post.slug}>
-                <Image 
-                  src={post.imageUrl} 
+          {blogPosts.map(post => (
+            <article key={post._id} className="bg-white rounded-xl shadow-lg overflow-hidden transition-transform hover:scale-105 border border-gray-200 dark:bg-slate-800 dark:border-slate-700">
+              <Link href={`/blog/${post.slug}`}>
+                <img
+                  src={post.imageUrl}
                   alt={post.title} 
                   width={600} 
                   height={400} 
-                  className="w-full h-48 object-cover" 
+                  className="w-full h-[17rem] object-cover" 
                 />
                 <div className="p-6">
-                  <div className="flex gap-2 mb-3">
-                    {post.categories.map(category => (
-                      <span 
-                        key={category} 
-                        className="px-2 py-1 text-xs rounded-full bg-blue-100 whitespace-nowrap  text-blue-600 dark:bg-blue-500/10 dark:text-blue-400"
-                      >
-                        {category}
-                      </span>
-                    ))}
-                  </div>
                   <h2 className="text-2xl font-semibold mb-2 text-gray-900 hover:text-blue-600 dark:text-white dark:hover:text-blue-400">
-                    <Link href={"/blog/" + post.slug}>{post.title}</Link>
+                    {post.title}
                   </h2>
-                  <p className="text-gray-600 mb-4 dark:text-gray-400">{post.excerpt}</p>
+                  <p className="text-gray-600 mb-4 dark:text-gray-400 line-clamp-3">{post.content}</p>
                   <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
-                    <span>{post.author}</span>
-                    <time dateTime={post.date}>{post.date}</time>
-                  </div>
-                  <div className="mt-4 flex justify-between items-center">
-                    <span className="text-sm text-gray-500 dark:text-gray-400">{post.readTime}</span>
-                   
+                    <span>{post.author || 'Gadget Insider'}</span>
+                    <time dateTime={post.createdAt}>{new Date(post.createdAt).toLocaleDateString()}</time>
                   </div>
                 </div>
-                        </Link>
-              </article>
-            );
-          })}
+              </Link>
+            </article>
+          ))}
         </section>
       </div>
-          <Script id="schema-org" type="application/ld+json">
+
+      <Script id="schema-org" type="application/ld+json">
         {`
           {
             "@context": "https://schema.org",
@@ -82,4 +79,3 @@ export default function Home() {
     </>
   )
 }
-
